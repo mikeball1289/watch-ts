@@ -1,0 +1,26 @@
+{
+  "name": "watch-ts",
+  "version": "1.0.0",
+  "description": "A command line tool for quickly compiling using watchify, tsify, and browserify",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikeball1289/watch-ts.git"
+  },
+  "author": "Mike Ball",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikeball1289/watch-ts/issues"
+  },
+  "homepage": "https://github.com/mikeball1289/watch-ts#readme",
+  "dependencies": {
+    "browserify": "^16.2.0",
+    "optimist": "^0.6.1",
+    "tsify": "^4.0.0",
+    "typescript": "^2.8.3",
+    "watchify": "^3.11.0"
+  }
+}
