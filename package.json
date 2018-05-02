@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "A command line tool for quickly compiling using watchify, tsify, and browserify",
   "main": "index.js",
-  "bin": "./index.js",
+  "bin": {
+    "watch-ts": "./index.js"
+  },
+  "engines": {
+    "node": ">=0.8"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
