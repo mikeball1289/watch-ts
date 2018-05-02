@@ -28,7 +28,7 @@ let b = browserify( {
 } );
 
 b.plugin(tsify, { project: "." } );
-b.add(path.join(__dirname, inFile));
+b.add(inFile);
 
 b.on("update", bundle);
 bundle();
