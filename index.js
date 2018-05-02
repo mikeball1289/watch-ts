@@ -19,7 +19,7 @@ if (!outFile) {
 
 let b = browserify( {
     paths: [
-        __dirname + "/node_modules"
+        "./node_modules"
     ],
     cache: {},
     packageCache: {},
