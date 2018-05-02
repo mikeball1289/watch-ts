@@ -6,6 +6,32 @@ let tsify = require("tsify");
 let path = require("path");
 let optimist = require("optimist");
 
+if (optimist.argv["init"]) {
+    try {
+        fs.statSync("tsconfig.json");
+        console.error("tsconfig.json already exists");
+        process.exit(1);
+    } catch(err) { /* pass */ }
+    fs.writeFileSync("tsconfig.json",
+`{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "inlineSourceMap": true,
+        "inlineSources": true
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}`
+    );
+    fs.mkdirSync("src");
+    console.log("Your typescript project has been initialized.");
+    process.exit(0);
+}
+
 let inFile = optimist.argv._[0];
 
 if (!inFile) {
