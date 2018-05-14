@@ -6,6 +6,12 @@ let tsify = require("tsify");
 let path = require("path");
 let optimist = require("optimist");
 
+(async function() {
+
+try {
+    await require("./versionCheck").checkVersion();
+} catch(err) {}
+
 if (optimist.argv["init"]) {
 
     function fileExists(filename) {
@@ -17,30 +23,28 @@ if (optimist.argv["init"]) {
         }
     }
 
-    let react = optimist.argv["init"] === "react";
-    if (react) {
-        (async function() {
-            let io = require("./io");
-            let response = await io.stdin("bool", "Install react? (y/n) ");
+    if (optimist.argv["init"] === "react") {
+        let io = require("./io");
+        let response = await io.stdin("bool", "Install react? (y/n) ");
 
-            if (response) {
-                let child_process = require("child_process");
-                async function installReact() {
-                    return new Promise( (resolve, reject) => {
-                        console.log("Installing react...");
-                        child_process.exec("npm i --save react @types/react react-dom @types/react-dom", (err, stdout, stderr) => {
-                            if (err) return reject(err);
-                            console.log(stdout);
-                            console.log(stderr);
-                            resolve();
-                        } );
+        if (response) {
+            let child_process = require("child_process");
+            async function installReact() {
+                return new Promise( (resolve, reject) => {
+                    console.log("Installing react...");
+                    child_process.exec("npm i --save react @types/react react-dom @types/react-dom", (err, stdout, stderr) => {
+                        if (err) return reject(err);
+                        console.log(stdout);
+                        console.log(stderr);
+                        resolve();
                     } );
-                }
-                await installReact();
+                } );
             }
+            await installReact();
+        }
 
-            if (!fileExists("tsconfig.json")) {
-                fs.writeFileSync("tsconfig.json",
+        if (!fileExists("tsconfig.json")) {
+            fs.writeFileSync("tsconfig.json",
 `{
     "compilerOptions": {
         "jsx": "react",
@@ -56,15 +60,15 @@ if (optimist.argv["init"]) {
         "src/**/*.ts"
     ]
 }`
-                );
-            }
-            try {
-                fs.mkdirSync("src");
-                fs.mkdirSync("dist");
-            } catch(err) { /* pass */ }
+            );
+        }
+        try {
+            fs.mkdirSync("src");
+            fs.mkdirSync("dist");
+        } catch(err) { /* pass */ }
 
-            if (!fileExists("src/main.tsx")) {
-                fs.writeFileSync("src/main.tsx",
+        if (!fileExists("src/main.tsx")) {
+            fs.writeFileSync("src/main.tsx",
 `import * as React from "react";
 import * as ReactDOM from "react-dom";
 
@@ -84,15 +88,45 @@ window.addEventListener("load", () => {
 <body>
     <div id="container"></div>
 </body>`
-                );
-            }
-            console.log("Your react project has been initialized.");
-            console.log("Run the build process with");
-            console.log(" watch-ts src/main.tsx -o dist");
-            process.exit(0);
-        })();
-    } else {
-        
+            );
+        }
+        console.log("Your react project has been initialized.");
+        console.log("Run the build process with");
+        console.log(" watch-ts src/main.tsx -o dist");
+        process.exit(0);
+    } else if (optimist.argv["init"] === "node") {
+        if (!fileExists("tsconfig.json")) {
+            fs.writeFileSync("tsconfig.json",
+`{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "outDir": "bin"
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}`
+            );
+        }
+        try {
+            fs.mkdirSync("src");
+        } catch(err) { /* pass */ }
+        try {
+            fs.mkdirSync("bin");
+        } catch(err) { /* pass */ }
+
+        if (!fileExists("src/main.ts")) {
+            fs.writeFileSync("src/main.ts",
+`console.log("Hello world");`
+            );
+        }
+        console.log("Your typescript project has been initialized.");
+    } else if (optimist.argv["init"]) {
         if (!fileExists("tsconfig.json")) {
             fs.writeFileSync("tsconfig.json",
 `{
@@ -189,7 +223,9 @@ window.addEventListener("load", () => {
                 } else {
                     console.log(`\x1b[32m[${currentTime()}]    Compiling ${path.basename(inFile)} complete ---\x1b[0m`);
                 }
-            } ) );
+            } ) )
+            .on("error", () => console.error(`\x1b[31m[${currentTime()}]    An unexpected error occurred in ${path.basename(inFile)} ---\x1b[0m`) );
         }
     }
 }
+})();
