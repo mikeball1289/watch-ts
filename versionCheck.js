@@ -12,7 +12,7 @@ module.exports.checkVersion = async function() {
             res.on("end", () => {
                 let myVersion = JSON.parse(localPackage).version;
                 let remoteVersion = JSON.parse(content).version;
-                if (myVersion !== remoteVersion || true) {
+                if (myVersion !== remoteVersion) {
                     let paddedLocal = (myVersion + "   ").substr(0, 8);
                     let paddedRemote = (remoteVersion + "   ").substr(0, 8);
                     console.log(
