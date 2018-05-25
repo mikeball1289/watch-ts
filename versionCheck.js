@@ -29,6 +29,6 @@ module.exports.checkVersion = async function() {
                 resolve();
             } );
             res.on("error", reject);
-        } );
+        } ).on("error", reject);
     } );
 }
