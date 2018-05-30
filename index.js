@@ -188,17 +188,16 @@ window.addEventListener("load", () => {
     
     for (let inFile of optimist.argv._) {
         let outFile = path.basename(inFile).replace(/\.tsx?$/, "") + ".js";
-        
+
         let b = browserify( {
             paths: [
                 "./node_modules"
             ],
             cache: {},
             packageCache: {},
-            plugin: [ watchify ],
+            plugin: optimist.argv["watch"] || optimist.argv.w ? [ watchify ] : [],
             debug: true,
         } );
-        
         b.plugin(tsify, { project: "." } );
         b.add(inFile);
         
