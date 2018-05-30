@@ -12,6 +12,31 @@ try {
     await require("./versionCheck").checkVersion();
 } catch(err) {}
 
+let version = JSON.parse(fs.readFileSync("package.json", "ascii")).version;
+
+if (optimist.argv["help"] || optimist.argv.h) {
+    console.log(
+`browser-ts v${version}
+  usage: browser-ts [opts]
+    broswer-ts <file1.ts> [file2.ts ...] -o <outDir> [-w|--watch]
+    browser-ts --init [react]
+
+  flags:
+    -o <outDir>: send compiled files to outDir
+    --init: initialize a new typescript project
+    --init react: initialze a new react project
+    -v, --version: show the version number
+    -h, --help: show this help
+`
+    );
+    process.exit();
+}
+
+if (optimist.argv["version"] || optimist.argv.v) {
+    console.log(`browser-ts v${version}`);
+    process.exit();
+}
+
 if (optimist.argv["init"]) {
 
     function fileExists(filename) {

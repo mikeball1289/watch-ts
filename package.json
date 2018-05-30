@@ -1,13 +1,13 @@
 {
   "name": "browser-ts",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A command line tool for quickly compiling using watchify, tsify, and browserify",
   "main": "index.js",
   "bin": {
     "browser-ts": "./index.js"
   },
   "engines": {
-    "node": ">=0.8"
+    "node": ">=8.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
