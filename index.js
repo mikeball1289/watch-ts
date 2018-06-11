@@ -12,7 +12,7 @@ try {
     await require("./versionCheck").checkVersion();
 } catch(err) {}
 
-let version = JSON.parse(fs.readFileSync("package.json", "ascii")).version;
+let version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"), "ascii")).version;
 
 if (optimist.argv["help"] || optimist.argv.h) {
     console.log(
